@@ -70,3 +70,4 @@ dvi900t
 dvi8mhp
 dvi95ct
 dvi9741
+dvib5xu
