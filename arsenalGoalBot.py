@@ -67,6 +67,8 @@ def get_sql_items(query):
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND opposition = %s; '''
             print("Not league query")
             return sqlquery, params
+    
+    # TODO Add season specific query as well.
 
 
 def get_urls(sqlquery, params):
@@ -144,6 +146,7 @@ def run(r):
                 print("Sleep for 10...")
                 time.sleep(10)
 
+        # TODO work on assist part of the code
         if "!arsenalassist" in body:
 
 
