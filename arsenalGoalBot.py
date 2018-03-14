@@ -1,4 +1,5 @@
 import praw
+import prawcore 
 import config
 import postgresConfig
 import psycopg2
@@ -32,9 +33,23 @@ def parse_body(body):
 
     return query
 
+def parse_body_assist(body):
+    # Find comments that start with the keyword and start indexing the characters
+    start_index = body.find('!arsenalassist ')
+    # Remove first 13 characters to pull request
+    body = body[start_index + 15:]
+    # End indexing at a new line
+    end_index = body.find('\n')
+
+    print('user query: {}'.format(body))
+    # Split the query into different sections at each comma
+    query = body.split(',')
+
+    return query
+
 
 def get_sql_items(query):
-`   # Create an empty array for params to be added to
+    # Create an empty array for params to be added to
     params = []
     # Designate variable for first portion of the query
     player_name = query[0].strip()
@@ -47,8 +62,17 @@ def get_sql_items(query):
         second_query = query[1].strip()
         # Search to see if the second portion is a competion specific query
         if second_query == "league cup" or second_query == "community shield" or second_query == "premier league" or second_query == "fa cup" or second_query == "europa league" or second_query == "champions league":
+            
             # Add second portion to the params
             params.append(second_query)
+
+            if 0 <= 2 < len(query):
+
+                third_query = query[2].strip()
+                params.append(third_query)
+                sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND competition = %s AND season = %s; '''
+                return sqlquery, params
+            
             # Build a query specific to search for player and competion
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND competition = %s; '''
             print("Search via leagues")
@@ -59,16 +83,78 @@ def get_sql_items(query):
             print('No second query item')
             return("no item")
 
+        elif second_query == "2017-2018" or "2016-2017":
+            params.append(second_query)
+            sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND season = %s; '''
+            return sqlquery, params
+
         # If the second section does not state a competition
         else:
             # add second section to params
             params.append(second_query)
+            if 0 <= 2 < len(query):
+
+                third_query = query[2].strip()
+                params.append(third_query)
+                sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND opposition = %s AND season = %s; '''
+                return sqlquery, params
+
             # Query specifically for player and opposition
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND opposition = %s; '''
             print("Not league query")
             return sqlquery, params
+
+
+def get_assist_items(query):
+    # Create an empty array for params to be added to
+    params = []
+    # Designate variable for first portion of the query
+    player_name = query[0].strip()
+    # Add player_name to params array
+    params.append(player_name)
     
-    # TODO Add season specific query as well.
+    # If query is longer than one section..
+    if 0 <= 1 < len(query):
+        # Create a variable for the second portion of the query
+        second_query = query[1].strip()
+        # Search to see if the second portion is a competion specific query
+        if second_query is ["league cup", "community shield", "premier league", "fa cup", "europa league", "champions league"]:
+            
+            # Add second portion to the params
+            params.append(second_query)
+
+            if 0 <= 2 < len(query):
+
+                third_query = query[2].strip()
+                params.append(third_query)
+                sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND competition = %s AND season = %s; '''
+                return sqlquery, params
+            
+            # Build a query specific to search for player and competion
+            sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND competition = %s; '''
+            print("Search via leagues")
+            return sqlquery, params
+
+        elif second_query is ["2017-2018", "2016-2017", "2015-2016", "2014-2015", "2013-2014", "2012-2013", "2011-2012", "2010-2011", "2009-2010", "2008-2009", "2007-2008", "2006-2007", "2005-2006", "2004-2005", "2003-2004", "2002-2003", "2001-2002", "2000-2001"]:
+            params.append(second_query)
+            sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND season = %s; '''
+            return sqlquery, params
+
+        # If the second section does not state a competition
+        else:
+            # add second section to params
+            params.append(second_query)
+            if 0 <= 2 < len(query):
+
+                third_query = query[2].strip()
+                params.append(third_query)
+                sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND opposition = %s AND season = %s; '''
+                return sqlquery, params
+
+            # Query specifically for player and opposition
+            sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND opposition = %s; '''
+            print("Not league query")
+            return sqlquery, params
 
 
 def get_urls(sqlquery, params):
@@ -98,7 +184,8 @@ def run(r):
         if "!arsenalgoal" in body:
             with open('goalComments.txt', 'r') as outfile:
                 seen_comments = outfile.read().splitlines()
-            # See if the comment in the subreddit has already been answered.
+            print(comment.id)
+            # See if the comment in the subreddit has not already been answered.
             if comment.id not in seen_comments:
 
                 body = comment.body.lower()
@@ -107,8 +194,7 @@ def run(r):
                 # If a query the individual tried to use is not in the correct format
                 # mark it as helped and let the individual know where to get help.
                 if sql is None:
-                    # TODO grab thread for help
-                    reply = 'It looks liken your request is in a format I do not understand.  Feel free to [post a question in the help thread.]()'
+                    reply = 'It looks liken your request is in a format I do not understand.  Feel free to [post a question in the help thread.](https://www.reddit.com/r/arsenal_goal_bot/comments/83i7ox/arsenal_goal_bot_questions/)'
                     comment.reply(reply)
                     with open('goalComments.txt', 'a+') as outfile:
                         outfile.write(comment.id + '\n')
@@ -121,7 +207,7 @@ def run(r):
                     sqlThing = sql[0]
                     sqlParams = sql[1]
                     reply = get_urls(sqlThing, sqlParams)
-                    print("what are this: ", reply)
+                    
                     # Create and send the reply
                     if reply:
                         comment.reply(reply)
@@ -132,8 +218,7 @@ def run(r):
                         time.sleep(10)
                     # If the reply comes back with no results. Let individual know
                     else:
-                        # TODO find the help thread.
-                        reply = 'It seems that there is no information in the database for this request.  Feel free to [post a question in the help thread.]()'
+                        reply = 'It seems that there is no information in the database for this request.  Feel free to [post a question in the help thread.](https://www.reddit.com/r/arsenal_goal_bot/comments/83i7ox/arsenal_goal_bot_questions/)'
                         comment.reply(reply)
                         with open('goalComments.txt', 'a+') as outfile:
                             outfile.write(comment.id + '\n') 
@@ -146,8 +231,58 @@ def run(r):
                 print("Sleep for 10...")
                 time.sleep(10)
 
-        # TODO work on assist part of the code
+        # Pull in Gifs of Assists
         if "!arsenalassist" in body:
+            print("arsenal assist command")
+            # store list of existing comments associated with assists
+            with open('assistComments.txt', 'r') as outfile:
+                seen_comments = outfile.read().splitlines()
+            print(comment.id)
+            # See if the comment in the subreddit has not already been answered.
+            if comment.id not in seen_comments:
+
+                body = comment.body.lower()
+                query = parse_body_assist(body)
+                sql = get_assist_items(query)
+                # If a query the individual tried to use is not in the correct format
+                # mark it as helped and let the individual know where to get help.
+                if sql is None:
+                    reply = 'It looks liken your request is in a format I do not understand.  Feel free to [post a question in the help thread.](https://www.reddit.com/r/arsenal_goal_bot/comments/83i7ox/arsenal_goal_bot_questions/)'
+                    comment.reply(reply)
+                    with open('assistComments.txt', 'a+') as outfile:
+                        outfile.write(comment.id + '\n')
+
+                    print("not valid query..")
+                    time.sleep(10)
+                # If the comment uses the correct format find the results
+                else:
+                    print("this is sql: ", sql)
+                    sqlThing = sql[0]
+                    sqlParams = sql[1]
+                    reply = get_urls(sqlThing, sqlParams)
+                    
+                    # Create and send the reply
+                    if reply:
+                        comment.reply(reply)
+                        with open('assistComments.txt', 'a+') as outfile:
+                            outfile.write(comment.id + '\n') 
+
+                        print("Sleep for 10...")
+                        time.sleep(10)
+                    # If the reply comes back with no results. Let individual know
+                    else:
+                        reply = 'It seems that there is no information in the database for this request.  Feel free to [post a question in the help thread.](https://www.reddit.com/r/arsenal_goal_bot/comments/83i7ox/arsenal_goal_bot_questions/)'
+                        comment.reply(reply)
+                        with open('assistComments.txt', 'a+') as outfile:
+                            outfile.write(comment.id + '\n') 
+
+                        print("Sleep for 10...")
+                        time.sleep(10)
+            else:
+                # print out when comment was already addressed
+                print('comment already made')
+                print("Sleep for 10...")
+                time.sleep(10)
 
 
 def main():
@@ -158,10 +293,22 @@ def main():
         try:
             run(r)
         # For session time outs
-        except prawcode.exceptions.ServerError as http_error:
+        except prawcore.exceptions.ServerError as http_error:
             print(http_error)
             print('waiting 1 minute')
-            sleep(60)
+            time.sleep(60)
+        except prawcore.exceptions.ResponseException as response_error:
+            print(response_error)
+            print('waiting 1 minute')
+            time.sleep(60)
+        except prawcore.exceptions.RequestException as request_error:
+            print(request_error)
+            print('waiting 1 minute')
+            time.sleep(60)
+        except Exception as e:
+            print('error: {}'.format(e))
+            print('waiting 1 minute')
+            time.sleep(60)
 
 
 if __name__ == '__main__':
