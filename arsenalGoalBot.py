@@ -4,6 +4,7 @@ import config
 import postgresConfig
 import psycopg2
 import time
+import unidecode
 
 
 def authenticate():
@@ -53,8 +54,11 @@ def get_sql_items(query):
     params = []
     # Designate variable for first portion of the query
     player_name = query[0].strip()
+
+    # Remove special characters
+    player_name_string = unidecode.unidecode(player_name)
     # Add player_name to params array
-    params.append(player_name)
+    params.append(player_name_string)
     
     # If query is longer than one section..
     if 0 <= 1 < len(query):
@@ -83,7 +87,7 @@ def get_sql_items(query):
             print('No second query item')
             return("no item")
 
-        elif second_query == "2017-2018" or "2016-2017":
+        elif second_query == "2017-2018" or second_query == "2016-2017":
             params.append(second_query)
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND season = %s; '''
             return sqlquery, params
@@ -118,7 +122,7 @@ def get_assist_items(query):
         # Create a variable for the second portion of the query
         second_query = query[1].strip()
         # Search to see if the second portion is a competion specific query
-        if second_query is ["league cup", "community shield", "premier league", "fa cup", "europa league", "champions league"]:
+        if second_query == "league cup" or second_query == "community shield" or second_query == "premier league" or second_query == "fa cup" or second_query == "europa league" or second_query == "champions league":
             
             # Add second portion to the params
             params.append(second_query)
@@ -135,7 +139,7 @@ def get_assist_items(query):
             print("Search via leagues")
             return sqlquery, params
 
-        elif second_query is ["2017-2018", "2016-2017", "2015-2016", "2014-2015", "2013-2014", "2012-2013", "2011-2012", "2010-2011", "2009-2010", "2008-2009", "2007-2008", "2006-2007", "2005-2006", "2004-2005", "2003-2004", "2002-2003", "2001-2002", "2000-2001"]:
+        elif second_query == "2017-2018" or second_query == "2016-2017" or second_query == "2015-2016" or second_query == "2014-2015" or second_query == "2013-2014" or second_query == "2012-2013" or second_query == "2011-2012" or second_query == "2010-2011" or second_query == "2009-2010" or second_query == "2008-2009" or second_query == "2007-2008" or second_query == "2006-2007" or second_query == "2005-2006" or second_query == "2004-2005" or second_query == "2003-2004" or second_query == "2002-2003" or second_query == "2001-2002" or second_query == "2000-2001":
             params.append(second_query)
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND season = %s; '''
             return sqlquery, params
@@ -178,7 +182,7 @@ def get_urls(sqlquery, params):
 
 def run(r):
     # Get all comments from designated subreddits
-    for comment in r.subreddit('arsenal_goal_bot').stream.comments():
+    for comment in r.subreddit('arsenal_goal_bot+Gunners').stream.comments():
         body = comment.body
         # listen for any comments that contain the keyword
         if "!arsenalgoal" in body:
