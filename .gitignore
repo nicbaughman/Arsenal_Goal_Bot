@@ -1,3 +1,4 @@
 config.py
 goalComments.txt
 assistComments.txt
+postgresConfig.py
