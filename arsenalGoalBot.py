@@ -18,6 +18,10 @@ def authenticate():
 
     return r
 
+FOOTER = '''___\n\n
+^^[Wiki](https://www.reddit.com/r/arsenal_goal_bot/wiki/index)
+^^| ^^[Feedback](/r/arsenal_goal_bot)
+^^| ^^[Creator](/u/BSUWolf)'''
 
 def parse_body(body):
     # Find comments that start with the keyword and start indexing the characters
@@ -173,6 +177,7 @@ def get_urls(sqlquery, params):
             reply += '[{}: {} ({})](https://gfycat.com/{})'.format(record[0], record[1], record[2], record[3])
             reply += '\n\n'
 
+        reply += FOOTER
         return reply
     
 
