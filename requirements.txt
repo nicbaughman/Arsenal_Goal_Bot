@@ -1,0 +1,11 @@
+certifi==2018.4.16
+chardet==3.0.4
+idna==2.7
+praw==5.4.0
+prawcore==0.14.0
+psycopg2==2.7.5
+psycopg2-binary==2.7.5
+requests==2.19.1
+Unidecode==1.0.22
+update-checker==0.16
+urllib3==1.23

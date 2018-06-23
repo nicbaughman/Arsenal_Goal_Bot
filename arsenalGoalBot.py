@@ -167,7 +167,7 @@ def get_assist_items(query):
 
 def get_urls(sqlquery, params):
     # Variables to connect to DB
-    conn_string = "host='localhost' dbname='arsenal_bot' user='nicbaughman'"
+    conn_string = "host='localhost' dbname='arsenal_bot' user='nic'"
     # Connect to DB
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()

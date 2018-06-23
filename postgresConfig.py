@@ -3,7 +3,7 @@ import sys
  
 def main():
 	#Define our connection string
-	conn_string = "host='localhost' dbname='arsenal_bot' user='nicbaughman'"
+	conn_string = "host='localhost' dbname='arsenal_bot' user='nic'"
  
 	# print the connection string we will use to connect
 	print("Connecting to database\n	->%s" % (conn_string))
