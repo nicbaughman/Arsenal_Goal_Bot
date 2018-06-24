@@ -1,23 +1,36 @@
 import praw
 import prawcore 
-#import config
+import config
 import postgresConfig
 import psycopg2
 import time
 import unidecode
+import os
 
 
 def authenticate():
+    is_prod = os.environ.get('IS_HEROKU', None)
     # grab all user configs from the config file
     # Note: File is not shared to reduce multiple instances of the bot running
-    r = praw.Reddit(username = os.environ['username'],
-            password = os.environ['password'],
-            client_id = cos.environ['client_id'],
-            client_secret = os.environ['client_secret'],
-            user_agent = "Arsenal Goal Bot v0.1",
-            )
 
-    return r
+    if is_prod
+        r = praw.Reddit(username = os.environ['username'],
+                password = os.environ['password'],
+                client_id = cos.environ['client_id'],
+                client_secret = os.environ['client_secret'],
+                user_agent = "Arsenal Goal Bot v0.1",
+                )
+                
+        return r
+    else 
+        r = praw.Reddit(username = config.username,
+                password = config.password,
+                client_id = config.client_id,
+                client_secret = config.client_secret,
+                user_agent = "Arsenal Goal Bot v0.1",
+                )
+                
+        return r
 
 FOOTER = '''___\n\n
 ^^[Wiki](https://www.reddit.com/r/arsenal_goal_bot/wiki/index)
