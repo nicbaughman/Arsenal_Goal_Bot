@@ -10,10 +10,10 @@ import unidecode
 def authenticate():
     # grab all user configs from the config file
     # Note: File is not shared to reduce multiple instances of the bot running
-    r = praw.Reddit(username = config.username,
-            password = config.password,
-            client_id = config.client_id,
-            client_secret = config.client_secret,
+    r = praw.Reddit(username = os.environ['username'],
+            password = os.environ['password'],
+            client_id = cos.environ['client_id'],
+            client_secret = os.environ['client_secret'],
             user_agent = "Arsenal Goal Bot v0.1",
             )
 
