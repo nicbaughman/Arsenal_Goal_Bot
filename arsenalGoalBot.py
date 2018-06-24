@@ -12,7 +12,7 @@ def authenticate():
     is_prod = os.environ.get('IS_HEROKU', None)
     # grab all user configs from the config file
     # Note: File is not shared to reduce multiple instances of the bot running
-
+    print("is prod?? ", is_prod)
     if is_prod:
         r = praw.Reddit(username = os.environ['username'],
                 password = os.environ['password'],
