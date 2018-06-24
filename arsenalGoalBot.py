@@ -13,7 +13,7 @@ def authenticate():
     # grab all user configs from the config file
     # Note: File is not shared to reduce multiple instances of the bot running
 
-    if is_prod
+    if is_prod:
         r = praw.Reddit(username = os.environ['username'],
                 password = os.environ['password'],
                 client_id = cos.environ['client_id'],
@@ -22,7 +22,7 @@ def authenticate():
                 )
                 
         return r
-    else 
+    else:
         r = praw.Reddit(username = config.username,
                 password = config.password,
                 client_id = config.client_id,
