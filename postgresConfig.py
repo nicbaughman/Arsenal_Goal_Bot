@@ -4,6 +4,8 @@ import os
  
 def main():
 	is_prod = os.environ.get('IS_HEROKU', None)
+	
+	print("is prod?? ", is_prod),
 
 	if is_prod:
 		#Define our connection string
