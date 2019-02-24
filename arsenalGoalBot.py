@@ -35,8 +35,7 @@ def authenticate():
 FOOTER = '''___\n\n
 ^^[Wiki](https://www.reddit.com/r/arsenal_goal_bot/wiki/index)
 ^^| ^^[Feedback](/r/arsenal_goal_bot)
-^^| ^^[Creator](/u/BSUWolf)
-^^| TESTING'''
+^^| ^^[Creator](/u/BSUWolf)'''
 
 def parse_body(body):
     # Find comments that start with the keyword and start indexing the characters
