@@ -1,6 +1,6 @@
 import praw
 import prawcore 
-#import config
+import config
 import postgresConfig
 import psycopg2
 import time
@@ -35,7 +35,8 @@ def authenticate():
 FOOTER = '''___\n\n
 ^^[Wiki](https://www.reddit.com/r/arsenal_goal_bot/wiki/index)
 ^^| ^^[Feedback](/r/arsenal_goal_bot)
-^^| ^^[Creator](/u/BSUWolf)'''
+^^| ^^[Creator](/u/BSUWolf)
+^^| TESTING'''
 
 def parse_body(body):
     # Find comments that start with the keyword and start indexing the characters
@@ -104,7 +105,7 @@ def get_sql_items(query):
             print('No second query item')
             return("no item")
 
-        elif second_query == "2017-2018" or second_query == "2016-2017":
+        elif second_query == "2018-2019":
             params.append(second_query)
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND season = %s; '''
             return sqlquery, params
@@ -229,7 +230,7 @@ def get_urls(sqlquery, params):
     if cursor:
         # For each record that comes back, loop through and build the reply
         for record in cursor:
-            reply += '[{}: {} ({})](https://gfycat.com/{})'.format(record[0], record[1], record[2], record[3])
+            reply += '[{}: {} ({})](https://imgur.com/{})'.format(record[0], record[1], record[2], record[3])
             reply += '\n\n'
 
         reply += FOOTER

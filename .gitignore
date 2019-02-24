@@ -1,2 +1,4 @@
 config.py
 postgresConfig.py
+*.txt
+__pycache__
