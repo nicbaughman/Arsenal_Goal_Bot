@@ -1,6 +1,6 @@
 import praw
 import prawcore 
-import config
+#import config
 import postgresConfig
 import psycopg2
 import time
