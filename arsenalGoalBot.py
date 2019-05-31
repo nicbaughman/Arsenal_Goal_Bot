@@ -1,11 +1,13 @@
 import praw
-import prawcore 
-#import config
+import prawcore
 import postgresConfig
 import psycopg2
 import time
 import unidecode
 import os
+
+# COMMENT THIS OUT FOR PRODUCTION
+#import config
 
 
 def authenticate():
@@ -156,7 +158,7 @@ def get_assist_items(query):
             print("Search via leagues")
             return sqlquery, params
 
-        elif second_query == "2017-2018" or second_query == "2016-2017" or second_query == "2015-2016" or second_query == "2014-2015" or second_query == "2013-2014" or second_query == "2012-2013" or second_query == "2011-2012" or second_query == "2010-2011" or second_query == "2009-2010" or second_query == "2008-2009" or second_query == "2007-2008" or second_query == "2006-2007" or second_query == "2005-2006" or second_query == "2004-2005" or second_query == "2003-2004" or second_query == "2002-2003" or second_query == "2001-2002" or second_query == "2000-2001":
+        elif second_query == "2018-2019":
             params.append(second_query)
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE assist = %s AND season = %s; '''
             return sqlquery, params
