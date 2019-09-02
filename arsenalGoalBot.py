@@ -80,7 +80,7 @@ def get_sql_items(query):
     # Check and see if year is the first query term
     if first_query_string == "2019-2020" or first_query_string == "2018-2019":
         sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
-        return sqlquery, first_query_string
+        return sqlquery, '${first_query_string}'
 
     else:
         # Add player_name to params array
@@ -147,7 +147,7 @@ def get_assist_items(query):
     # Check and see if year is the first query term
     if first_query_string == "2019-2020" or first_query_string == "2018-2019":
         sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
-        return sqlquery, first_query_string
+        return sqlquery, '${first_query_string}'
 
     else:
         # Add player_name to params array
