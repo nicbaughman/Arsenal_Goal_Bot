@@ -72,13 +72,20 @@ def get_sql_items(query):
     # Create an empty array for params to be added to
     params = []
     # Designate variable for first portion of the query
-    player_name = query[0].strip()
+    first_query = query[0].strip()
 
     # Remove special characters
-    player_name_string = unidecode.unidecode(player_name)
-    # Add player_name to params array
-    params.append(player_name_string)
+    first_query_string = unidecode.unidecode(first_query)
     
+    # Check and see if year is the first query term
+    if first_query_string == "2019-2020" or first_query_string == "2018-2019"
+        sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
+        return sqlquery, first_query_string
+
+    else:
+        # Add player_name to params array
+        params.append(first_query_string)
+
     # If query is longer than one section..
     if 0 <= 1 < len(query):
         # Create a variable for the second portion of the query
@@ -106,7 +113,7 @@ def get_sql_items(query):
             print('No second query item')
             return("no item")
 
-        elif second_query == "2018-2019":
+        elif second_query == "2019-2020" or second_query == "2018-2019":
             params.append(second_query)
             sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE scorer = %s AND season = %s; '''
             return sqlquery, params
@@ -132,10 +139,20 @@ def get_assist_items(query):
     # Create an empty array for params to be added to
     params = []
     # Designate variable for first portion of the query
-    player_name = query[0].strip()
-    # Add player_name to params array
-    params.append(player_name)
+    first_query = query[0].strip()
+
+    # Remove special characters
+    first_query_string = unidecode.unidecode(first_query)
     
+    # Check and see if year is the first query term
+    if first_query_string == "2019-2020" or first_query_string == "2018-2019"
+        sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
+        return sqlquery, first_query_string
+
+    else:
+        # Add player_name to params array
+        params.append(first_query_string)
+
     # If query is longer than one section..
     if 0 <= 1 < len(query):
         # Create a variable for the second portion of the query

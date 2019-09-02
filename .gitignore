@@ -1,4 +1,6 @@
 config.py
 postgresConfig.py
+goalComments.txt
+assistComments.text
 *.txt
 __pycache__
