@@ -78,7 +78,7 @@ def get_sql_items(query):
     first_query_string = unidecode.unidecode(first_query)
     
     # Check and see if year is the first query term
-    if first_query_string == "2019-2020" or first_query_string == "2018-2019"
+    if first_query_string == "2019-2020" or first_query_string == "2018-2019":
         sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
         return sqlquery, first_query_string
 
@@ -145,7 +145,7 @@ def get_assist_items(query):
     first_query_string = unidecode.unidecode(first_query)
     
     # Check and see if year is the first query term
-    if first_query_string == "2019-2020" or first_query_string == "2018-2019"
+    if first_query_string == "2019-2020" or first_query_string == "2018-2019":
         sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
         return sqlquery, first_query_string
 
