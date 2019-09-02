@@ -76,17 +76,9 @@ def get_sql_items(query):
 
     # Remove special characters
     first_query_string = unidecode.unidecode(first_query)
-    print('first_query_string: Line 78 - ', first_query_string)
-    # Check and see if year is the first query term
-    if first_query_string == "2019-2020" or first_query_string == "2018-2019":
-        params.append(first_query_string)
-        sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
-        return sqlquery, params
-
-    else:
-        # Add player_name to params array
-        params.append(first_query_string)
-
+    # Add player_name to params array
+    params.append(first_query_string)
+    
     # If query is longer than one section..
     if 0 <= 1 < len(query):
         # Create a variable for the second portion of the query
@@ -140,20 +132,10 @@ def get_assist_items(query):
     # Create an empty array for params to be added to
     params = []
     # Designate variable for first portion of the query
-    first_query = query[0].strip()
-
-    # Remove special characters
-    first_query_string = unidecode.unidecode(first_query)
+    player_name = query[0].strip()
+    # Add player_name to params array
+    params.append(player_name)
     
-    # Check and see if year is the first query term
-    if first_query_string == "2019-2020" or first_query_string == "2018-2019":
-        sqlquery = '''SELECT opposition, competition, season, url FROM mens_goals WHERE season = %s; '''
-        return sqlquery, '${first_query_string}'
-
-    else:
-        # Add player_name to params array
-        params.append(first_query_string)
-
     # If query is longer than one section..
     if 0 <= 1 < len(query):
         # Create a variable for the second portion of the query
@@ -287,7 +269,7 @@ def run(r):
                     sqlThing = sql[0]
                     sqlParams = sql[1]
                     reply = get_urls(sqlThing, sqlParams)
-                    print('reply: ', reply)
+                    
                     # Create and send the reply
                     if reply:
                         comment.reply(reply)
