@@ -108,7 +108,7 @@ def get_sql_items(query):
 
         elif second_query == "2019-2020" or second_query == "2018-2019":
             params.append(second_query)
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE scorer = %s AND season = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url)  FROM mens_goals WHERE season = scorer = %s AND season = %s; '''
             return sqlquery, params
 
         # If the second section does not state a competition
