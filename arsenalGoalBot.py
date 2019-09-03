@@ -269,7 +269,7 @@ def run(r):
                     sqlThing = sql[0]
                     sqlParams = sql[1]
                     reply = get_urls(sqlThing, sqlParams)
-                    
+                    print("reply count: ", len(reply))
                     # Create and send the reply
                     if reply:
                         comment.reply(reply)
