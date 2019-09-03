@@ -93,11 +93,11 @@ def get_sql_items(query):
 
                 third_query = query[2].strip()
                 params.append(third_query)
-                sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE scorer = %s AND competition = %s AND season = %s; '''
+                sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE scorer = %s AND competition = %s AND season = %s; '''
                 return sqlquery, params
             
             # Build a query specific to search for player and competion
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE scorer = %s AND competition = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE scorer = %s AND competition = %s; '''
             print("Search via leagues")
             return sqlquery, params
         
@@ -119,11 +119,11 @@ def get_sql_items(query):
 
                 third_query = query[2].strip()
                 params.append(third_query)
-                sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE scorer = %s AND opposition = %s AND season = %s; '''
+                sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE scorer = %s AND opposition = %s AND season = %s; '''
                 return sqlquery, params
 
             # Query specifically for player and opposition
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE scorer = %s AND opposition = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE scorer = %s AND opposition = %s; '''
             print("Not league query")
             return sqlquery, params
 
@@ -150,17 +150,17 @@ def get_assist_items(query):
 
                 third_query = query[2].strip()
                 params.append(third_query)
-                sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE assist = %s AND competition = %s AND season = %s; '''
+                sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE assist = %s AND competition = %s AND season = %s; '''
                 return sqlquery, params
             
             # Build a query specific to search for player and competion
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE assist = %s AND competition = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE assist = %s AND competition = %s; '''
             print("Search via leagues")
             return sqlquery, params
 
         elif second_query == "2018-2019":
             params.append(second_query)
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE assist = %s AND season = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE assist = %s AND season = %s; '''
             return sqlquery, params
 
         # If the second section does not state a competition
@@ -171,11 +171,11 @@ def get_assist_items(query):
 
                 third_query = query[2].strip()
                 params.append(third_query)
-                sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE assist = %s AND opposition = %s AND season = %s; '''
+                sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE assist = %s AND opposition = %s AND season = %s; '''
                 return sqlquery, params
 
             # Query specifically for player and opposition
-            sqlquery = '''SELECT opposition, competition, season, url, trim(' ') FROM mens_goals WHERE assist = %s AND opposition = %s; '''
+            sqlquery = '''SELECT opposition, competition, season, url, trim(both ' ' from opposition), trim(both ' ' from competition), trim(both ' ' from season), trim(both ' ' from url) FROM mens_goals WHERE assist = %s AND opposition = %s; '''
             print("Not league query")
             return sqlquery, params
 
@@ -231,7 +231,7 @@ def get_urls(sqlquery, params):
     if cursor:
         # For each record that comes back, loop through and build the reply
         for record in cursor:
-            reply += '[{}: {} ({})](https://imgur.com/{})'.format(record[0], record[1], record[2], record[3])
+            reply += '[{}: {} ({})](https://imgur.com/{})'.format(record[4], record[5], record[6], record[7])
             reply += '\n\n'
 
         reply += FOOTER
